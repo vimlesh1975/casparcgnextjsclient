@@ -20,11 +20,23 @@ export async function POST(req, res) {
   const body = await req.json();
   console.log(body);
   if (body.action === 'endpoint') {
+    if (aa) {
+      aa.do(new AMCP.CustomCommand(body.command));
+    }
+
+    return new Response('');
+  }
+  if (body.action === 'connect') {
     if (!aa) {
       connect();
     }
-    aa.do(new AMCP.CustomCommand(body.command));
-    return new Response('');
+    return new Response(true);
+  }
+  if (body.action === 'disconnect') {
+    if (aa) {
+      aa = null;
+    }
+    return new Response(false);
   }
   return new Response('');
 }

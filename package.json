@@ -9,12 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "casparcg-connection": "^5.1.0",
+    "next": "^13.4.12",
+    "osc": "^2.4.4",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.0.4",
-    "casparcg-connection": "^5.1.0"
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.7.2"
   },
   "devDependencies": {
+    "@types/react": "18.2.45",
     "eslint": "^8",
     "eslint-config-next": "14.0.4"
   }
