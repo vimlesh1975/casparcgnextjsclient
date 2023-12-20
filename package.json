@@ -1,5 +1,5 @@
 {
-  "name": "undefinedcasparcgnextjsclient",
+  "name": "casparcgnextjsclient",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,7 +11,8 @@
   "dependencies": {
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.0.4"
+    "next": "14.0.4",
+    "casparcg-connection": "^5.1.0"
   },
   "devDependencies": {
     "eslint": "^8",
