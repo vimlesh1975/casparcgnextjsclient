@@ -1,5 +1,8 @@
 import { CasparCG, Options, AMCP } from 'casparcg-connection';
+import { NextResponse } from "next/server";
 
+import io from 'socket.io-client';
+const socket = io('http://localhost:3000');
 var aa;
 const connect = () => {
   aa = new CasparCG('127.0.0.1', 5250);
@@ -17,6 +20,7 @@ const connect = () => {
 };
 
 export async function POST(req, res) {
+  socket.emit('message1', 'Sync Process Completed');
   const body = await req.json();
   console.log(body);
   if (body.action === 'endpoint') {

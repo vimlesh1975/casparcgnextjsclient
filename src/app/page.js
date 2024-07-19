@@ -22,12 +22,13 @@ export default function Home() {
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
-    const socket = new io('/', {
-      path: '/api/socket/io',
-      addTrailingSlash: false,
-    });
+    const socket = io('http://localhost:3000');
     socket.on('connect', () => {
       console.log('SOCKET CONNECTED!', socket.id);
+    });
+
+    socket.on('message2', (msg) => {
+      console.log(msg);
     });
 
     socket.on('FromAPI', (data) => {

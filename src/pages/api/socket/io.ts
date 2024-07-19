@@ -20,7 +20,10 @@ const io1 = async (req: NextApiRequest, res: NextApiResponseServerIO) => {
             addTrailingSlash: false,
         });
 
-
+        io.on('message1', (data) => {
+            console.log('Recieved from API ::', data)
+            io.emit('message2', data);
+        })
         // append SocketIO server to Next.js socket server response
         res.socket.server.io = io;
 
