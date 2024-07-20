@@ -26,6 +26,19 @@ app.prepare().then(async () => {
                 // socket.emit("FromAPI", sectohmsm(parseFloat(oscMessage.args[1].value - oscMessage.args[0].value).toFixed(2)));
                 socket.emit("FromAPI", oscMessage);
             }
+
+            if (oscMessage.address === '/channel/1/mixer/audio/1/dBFS') {
+                socket.emit("Audio1", oscMessage);
+            }
+            if (oscMessage.address === '/channel/1/mixer/audio/2/dBFS') {
+                socket.emit("Audio2", oscMessage);
+            } else if (oscMessage.address === '/channel/1/mixer/audio/volume') {
+                // socket.emit("FromAPI", sectohmsm(parseFloat(oscMessage.args[1].value - oscMessage.args[0].value).toFixed(2)));
+                socket.emit("Audio", oscMessage);
+            }
+
+
+
         });
 
         socket.on('ServerConnectionStatus', (data) => {

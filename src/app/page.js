@@ -18,6 +18,8 @@ const sectohmsm = (totalSeconds) => {
 export default function Home() {
   const [command, setCommand] = useState('play 1-1 amb loop');
   const [time, settime] = useState('');
+  const [audio1, setAudio1] = useState(0);
+  const [audio2, setAudio2] = useState(0);
 
   const [connected, setConnected] = useState(false);
 
@@ -34,14 +36,37 @@ export default function Home() {
     });
 
     socket.on('FromAPI', (data) => {
-      // dispatch({ type: 'CHANGE_OSCMESSAGES', payload: data })
-
       settime(
         sectohmsm(
           parseFloat(data?.args[1]?.value - data?.args[0]?.value)?.toFixed(2)
         )
       );
     });
+
+    socket.on('Audio', (data) => {
+      var value = 20 * Math.log10(data.args[0].value / 2147483648)
+      if ((value === -Infinity)) {
+        setAudio1(-192);
+      }
+      else {
+        setAudio1(parseInt(value));
+      }
+      if ((value === -Infinity)) {
+        setAudio2(-192);
+      }
+      else {
+        setAudio2(parseInt(value));
+      }
+    });
+
+    socket.on('Audio1', (data) => {
+      setAudio1(parseInt(data.args[0].value));
+    });
+    socket.on('Audio2', (data) => {
+      setAudio2(parseInt(data.args[0].value));
+    });
+
+
     return () => {
       socket.disconnect();
     };
@@ -66,7 +91,6 @@ export default function Home() {
   return (
     <div>
       <h1>This is Casparcg Next Js Client</h1>
-      <h2>{connected && time}</h2>
       <div>
         <button
           style={{ backgroundColor: connected ? 'green' : 'red' }}
@@ -78,8 +102,6 @@ export default function Home() {
         >
           Connect
         </button>
-      </div>
-      <div>
         <button
           onClick={() =>
             endpoint({
@@ -89,19 +111,26 @@ export default function Home() {
         >
           DisConnect
         </button>
-      </div>
-      <button
-        onClick={() =>
-          endpoint({
-            action: 'endpoint',
-            command: 'play 1-1 red',
-          })
-        }
-      >
-        Play red color
-      </button>
-      <div>
-        <span>Command:</span>
+        <button
+          onClick={() =>
+            endpoint({
+              action: 'endpoint',
+              command: 'play 1-1 red',
+            })
+          }
+        >
+          Play red color
+        </button>
+        <button
+          onClick={() =>
+            endpoint({
+              action: 'endpoint',
+              command: 'play 1-1 go1080p25 loop',
+            })
+          }
+        >
+          Play go1080p25
+        </button>
         <input value={command} onChange={(e) => setCommand(e.target.value)} />
         <button
           onClick={() =>
@@ -114,6 +143,23 @@ export default function Home() {
           Play Command
         </button>
       </div>
+      <h2>{connected && time}</h2>
+      <div style={{ display: 'flex' }}>
+        <div>
+          <svg width="20" height="200">
+            <rect x="0" y="0" width="15" height="200" fill="green" />
+            <rect x="0" y={-192 - audio1} width="15" height="200" fill="grey" />
+          </svg>
+        </div>
+        <div>
+          <svg width="20" height="200">
+            <rect x="0" y="0" width="15" height="200" fill="green" />
+            <rect x="0" y={-192 - audio2} width="15" height="200" fill="grey" />
+          </svg>
+        </div>
+      </div>
+
+     
     </div>
   );
 }
