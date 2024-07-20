@@ -13,11 +13,6 @@ app.prepare().then(async () => {
     const server = express();
     const httpServer = http.createServer(server);
     const io = socketIO(httpServer);
-
-    // Initialize UDP port once
-
-
-
     io.on('connection', (socket) => {
         console.log('Client connected');
         const udpPort = initializeUdpPort();
@@ -32,7 +27,6 @@ app.prepare().then(async () => {
                 socket.emit("FromAPI", oscMessage);
             }
         });
-
 
         socket.on('message1', (data) => {
             console.log('Received from API ::', data);

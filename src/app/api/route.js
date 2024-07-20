@@ -1,5 +1,4 @@
 import { CasparCG, Options, AMCP } from 'casparcg-connection';
-import { NextResponse } from "next/server";
 
 import io from 'socket.io-client';
 const socket = io('http://localhost:3000');
