@@ -28,8 +28,9 @@ export default function Home() {
       console.log('SOCKET CONNECTED!', socket.id);
     });
 
-    socket.on('message2', (msg) => {
-      console.log(msg);
+    socket.on('ServerConnectionStatus', (msg) => {
+      console.log(msg)
+      setConnected(msg);
     });
 
     socket.on('FromAPI', (data) => {

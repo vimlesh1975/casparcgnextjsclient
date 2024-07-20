@@ -3,41 +3,37 @@ import { CasparCG, Options, AMCP } from 'casparcg-connection';
 import io from 'socket.io-client';
 const socket = io('http://localhost:3000');
 var aa;
-const connect = () => {
   aa = new CasparCG('127.0.0.1', 5250);
   aa.queueMode = Options.QueueMode.SEQUENTIAL;
-
   aa.onConnectionChanged = () => {
-    console.log(aa.connected);
+  socket.emit('ServerConnectionStatus', aa.connected);
+  console.log('ServerConnectionStatus ' + aa.connected);
   };
   aa.onDisconnected = () => {
-    console.log('disconnected');
+  socket.emit('ServerConnectionStatus', false);
   };
   aa.onConnected = () => {
-    console.log('connected');
+  socket.emit('ServerConnectionStatus', true);
   };
-};
 
 export async function POST(req, res) {
-  socket.emit('message1', 'Sync Process Completed');
+  socket.emit('ServerConnectionStatus', aa.connected);
   const body = await req.json();
-  console.log(body);
   if (body.action === 'endpoint') {
     if (aa) {
       aa.do(new AMCP.CustomCommand(body.command));
     }
-
     return new Response('');
   }
   if (body.action === 'connect') {
-    if (!aa) {
-      connect();
+    if (!aa.connected) {
+     aa.connect();
     }
     return new Response(true);
   }
   if (body.action === 'disconnect') {
-    if (aa) {
-      aa = null;
+    if (aa.connected) {
+      aa.disconnect();
     }
     return new Response(false);
   }

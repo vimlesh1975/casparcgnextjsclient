@@ -14,7 +14,7 @@ app.prepare().then(async () => {
     const httpServer = http.createServer(server);
     const io = socketIO(httpServer);
     io.on('connection', (socket) => {
-        console.log('Client connected');
+        console.log('Socket Client connected');
         const udpPort = initializeUdpPort();
 
         // Add a single listener for the UDP port
@@ -28,9 +28,9 @@ app.prepare().then(async () => {
             }
         });
 
-        socket.on('message1', (data) => {
+        socket.on('ServerConnectionStatus', (data) => {
             console.log('Received from API ::', data);
-            io.emit('message2', data);
+            io.emit('ServerConnectionStatus', data);
         });
     });
 
