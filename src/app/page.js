@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import Image from 'next/image';
 
 const sectohmsm = (totalSeconds) => {
   if (totalSeconds < 0) {
@@ -44,15 +45,17 @@ export default function Home() {
     });
 
     socket.on('Audio', (data) => {
+
       var value = 20 * Math.log10(data.args[0].value / 2147483648)
       if ((value === -Infinity)) {
-        setAudio1(-192);
+        setAudio1(-35);
       }
       else {
         setAudio1(parseInt(value));
       }
+      value = 20 * Math.log10(data.args[1].value / 2147483648)
       if ((value === -Infinity)) {
-        setAudio2(-192);
+        setAudio2(-35);
       }
       else {
         setAudio2(parseInt(value));
@@ -144,22 +147,29 @@ export default function Home() {
         </button>
       </div>
       <h2>{connected && time}</h2>
-      <div style={{ display: 'flex' }}>
-        <div>
-          <svg width="20" height="200">
-            <rect x="0" y="0" width="15" height="200" fill="green" />
-            <rect x="0" y={-192 - audio1} width="15" height="200" fill="grey" />
-          </svg>
-        </div>
-        <div>
-          <svg width="20" height="200">
-            <rect x="0" y="0" width="15" height="200" fill="green" />
-            <rect x="0" y={-192 - audio2} width="15" height="200" fill="grey" />
-          </svg>
+
+      <div>
+        <Image style={{ position: 'absolute', }} src="/images/Audio_Bar.jpg" alt="Logo" width={25} height={200} />
+        <Image style={{ position: 'absolute', left: 40 }} src="/images/Audio_Bar.jpg" alt="Logo" width={25} height={200} />
+
+        <div style={{ display: 'flex', position: 'absolute', }}>
+          <div style={{ opacity: 1 }}>
+            <svg width="10" height="200">
+              <rect x="0" y={-(audio1 * 200 / 35)} width="15" height="200" fill="green" />
+            </svg>
+          </div>
+          <div style={{ opacity: 1, position: 'absolute', left: 32 }}>
+            <svg width="10" height="200">
+              <rect x="0" y={-(audio2 * 200 / 35)} width="15" height="200" fill="green" />
+            </svg>
+          </div>
+
         </div>
       </div>
 
-     
+
+
+
     </div>
   );
 }
