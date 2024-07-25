@@ -16,6 +16,11 @@ var aa;
   socket.emit('ServerConnectionStatus', true);
   };
 
+            socket.on('ServerConnectionStatus2', data=>{
+              console.log('within routejs', data)
+            });
+
+
 export async function POST(req, res) {
   socket.emit('ServerConnectionStatus', aa.connected);
   const body = await req.json();

@@ -43,7 +43,8 @@ app.prepare().then(async () => {
 
         socket.on('ServerConnectionStatus', (data) => {
             console.log('Received from API ::', data);
-            io.emit('ServerConnectionStatus', data);
+            //io will broadcast but socket will ony send to routejs.
+            io.emit('ServerConnectionStatus2', data);//
         });
     });
 

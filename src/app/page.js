@@ -31,7 +31,7 @@ export default function Home() {
       console.log('SOCKET CONNECTED!', socket.id);
     });
 
-    socket.on('ServerConnectionStatus', (msg) => {
+    socket.on('ServerConnectionStatus2', (msg) => {
       console.log(msg)
       setConnected(msg);
     });
