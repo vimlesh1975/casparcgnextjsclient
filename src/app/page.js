@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import Image from 'next/image';
+import debounce from 'lodash.debounce'; // Importing debounce from lodash
 
 const sectohmsm = (totalSeconds) => {
   if (totalSeconds < 0) {
@@ -23,6 +24,8 @@ export default function Home() {
   const [audio2, setAudio2] = useState(0);
 
   const [connected, setConnected] = useState(false);
+  const [test, settest] = useState(10);
+
 
   useEffect(() => {
     // const socket = io('http://localhost:3000');
@@ -91,6 +94,43 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    const socket = io();
+    socket.on('connect', () => {
+      console.log('SOCKET CONNECTED!', socket.id);
+    });
+    const handleButtonDown = debounce((msg) => {
+      if (msg === 14) {
+        console.log(msg);
+        endpoint({
+          action: 'endpoint',
+          command: 'play 1-1 green',
+        })
+        settest(val=>val-1)
+        // setConnected(val=>!val)
+
+
+        // previous();
+      } else if (msg === 15) {
+        console.log(msg);
+        endpoint({
+          action: 'endpoint',
+          command: 'play 1-1 blue',
+        })
+        settest(val=>val+1)
+        // setConnected(val=>!val)
+        // next();
+      }
+    }, 300); // Debounce with 300ms delay
+
+    socket.on('buttondown1', handleButtonDown);
+
+    return () => {
+      socket.off('buttondown1', handleButtonDown);
+      socket.disconnect();
+    };
+  }, [])
+
   return (
     <div>
       <h1>This is Casparcg Next Js Client</h1>
@@ -147,6 +187,7 @@ export default function Home() {
         </button>
       </div>
       <h2>{connected && time}</h2>
+      {test}
 
       <div>
         <Image style={{ position: 'absolute', }} src="/images/Audio_Bar.jpg" alt="Logo" width={25} height={200} />
@@ -166,7 +207,6 @@ export default function Home() {
 
         </div>
       </div>
-
 
 
 

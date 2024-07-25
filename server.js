@@ -46,6 +46,34 @@ app.prepare().then(async () => {
             //io will broadcast but socket will ony send to routejs.
             io.emit('ServerConnectionStatus2', data);//
         });
+
+        //shuttleprocode
+        const shuttle = require('shuttle-control-usb');
+        shuttle.on('connected', (deviceInfo) => {
+            console.log('Connected to ' + deviceInfo.name);
+        });
+        // Start after 'connect' event listener has been set up
+        shuttle.start();
+        shuttle.on('buttondown', data => {
+            socket.emit('buttondown1', data);
+        })
+        shuttle.on('disconnected', data => {
+            console.log(data)
+        })
+        // shuttle.on('shuttle', data => {
+        //     console.log(data)
+        // })
+        shuttle.on('shuttle-trans', (data1, data2) => {
+            console.log(data1)
+            console.log(data2)
+        })
+        // shuttle.on('jog', (data1 )=> {
+        //     console.log(data1)
+        // })
+        shuttle.on('jog-dir', (data1) => {
+            console.log(data1)
+        })
+        //shuttleprocode
     });
 
     server.all('*', (req, res) => handle(req, res));
